@@ -1,5 +1,9 @@
 {
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 0,
+  "eslint.enable": true,
   "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"

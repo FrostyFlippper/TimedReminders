@@ -1,98 +1,86 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Appbar } from 'react-native-paper';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+//List of example reminders
+const reminders = [
+  { id: '1', title: 'Take medication', time: '09:00' },
+  { id: '2', title: 'Water plants', time: '18:00' },
+];
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+// Describes the data each row in the list receives
+type ItemProps = {
+  title: string;
+  time: string;
+};
+
+// Define a function called Item. It receives an ItemProps object, extracts its title and time, and returns the UI below
+// We destructure the ItemProps input type using { title, time }
+// And return the expression inside the () without needing a return statement
+const Item = ({ title, time }: ItemProps) => (
+  //Layout container
+  <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.time}>{time}</Text>
+  </View>
+);
+
+// We create the top bar using a material design theme
+function RemindersTopBar() {
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <Appbar.Header statusBarHeight={0} style={styles.header}>
+      <Appbar.Action
+        icon="menu"
+        iconColor="white"
+        //onPress={() =>
+
+        //}
+      />
+      <Appbar.Content title="Reminders" color="white" />
+    </Appbar.Header>
   );
 }
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+// We descibe the entire screen
+const App = () => (
+  <SafeAreaProvider>
+    <SafeAreaView style={styles.container}>
+      <RemindersTopBar />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <FlatList
+        data={reminders}
+        renderItem={({ item }) => <Item title={item.title} time={item.time} />}
+        keyExtractor={(item) => item.id}
+      />
+    </SafeAreaView>
+  </SafeAreaProvider>
+);
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
-
+// We describe the style for each element
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: '#121212',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+  header: {
+    backgroundColor: '#121212',
+    fontSize: 16,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  item: {
+    backgroundColor: '#1f1f1f',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 8,
   },
   title: {
-    textAlign: 'center',
+    color: 'white',
+    fontSize: 24,
   },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  time: {
+    color: 'white',
+    fontSize: 16,
   },
 });
+
+export default App;
