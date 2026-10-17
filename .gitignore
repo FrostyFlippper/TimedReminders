@@ -6,17 +6,17 @@ node_modules/
 # Expo
 .expo/
 dist/
-web-build/
 expo-env.d.ts
+web-build/
 
 # Native
-.kotlin/
-*.orig.*
 *.jks
-*.p8
-*.p12
 *.key
 *.mobileprovision
+*.orig.*
+*.p12
+*.p8
+.kotlin/
 
 # Metro
 .metro-health-check*
@@ -27,8 +27,8 @@ yarn-debug.*
 yarn-error.*
 
 # macOS
-.DS_Store
 *.pem
+.DS_Store
 
 # local env files
 .env*.local
@@ -36,11 +36,15 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-example
-
 # generated native folders
-/ios
 /android
+/ios
 
 /.idea
 /.vscode
+
+/.claude
+
+expo-env.d.ts
+
+README.md
